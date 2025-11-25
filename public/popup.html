@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Keycloak popup callback</title>
+  </head>
+  <body>
+    <script>
+      (function() {
+        try {
+          const message = {
+            type: "keycloak-popup-callback",
+            href: window.location.href,
+            hash: window.location.hash,
+            search: window.location.search
+          };
+          // send to opener (parent window)
+          if (window.opener && !window.opener.closed) {
+            window.opener.postMessage(message, window.location.origin);
+          } else {
+            // fallback: try postMessage to parent (if opener unavailable)
+            window.parent.postMessage(message, window.location.origin);
+          }
+        } catch (e) {
+          console.error("popup callback error", e);
+        } finally {
+          setTimeout(() => window.close(), 500);
+        }
+      })();
+    </script>
+    <p>Processing login... please wait.</p>
+  </body>
+</html>
