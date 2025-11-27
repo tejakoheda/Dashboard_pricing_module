@@ -1,6 +1,7 @@
 // src/pages/LoginPage.js
 import React from "react";
 import { useKeycloak } from "@react-keycloak/web";
+import "./login.css";
 
 export default function LoginPage() {
   const { keycloak } = useKeycloak();
@@ -9,6 +10,7 @@ export default function LoginPage() {
     try {
       const redirectUri =
         window.location.origin + "/keycloak-popup-callback.html";
+      // createLoginUrl may return a promise in some versions
       const loginUrl = await keycloak.createLoginUrl({ redirectUri });
 
       const width = 420;
@@ -23,6 +25,7 @@ export default function LoginPage() {
       );
     } catch (err) {
       console.error("Failed to open Keycloak popup login:", err);
+      // fallback: try synchronous createLoginUrl (older keycloak-js)
       try {
         const fallback = keycloak.createLoginUrl({
           redirectUri: window.location.origin + "/keycloak-popup-callback.html",
@@ -30,7 +33,7 @@ export default function LoginPage() {
         window.open(fallback, "kc_login_popup");
       } catch (e) {
         console.error("Fallback failed:", e);
-        alert("Unable to open login popup. See console.");
+        alert("Unable to open login popup. Check console for details.");
       }
     }
   };
