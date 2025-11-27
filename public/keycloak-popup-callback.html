@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -6,21 +6,21 @@
   </head>
   <body>
     <script>
-      // The Keycloak redirect will land here with code/token in URL.
-      // Notify the opener (parent window) that the redirect happened.
       try {
         if (window.opener && !window.opener.closed) {
-          window.opener.postMessage({ type: "kc_popup_auth", url: location.href }, location.origin);
+          window.opener.postMessage(
+            { type: "kc_popup_auth", url: location.href },
+            window.location.origin
+          );
         }
       } catch (e) {
         // ignore
       }
-      // close the popup
       window.close();
 
-      // Fallback: if popup can't close automatically (blocked), show a message
       setTimeout(() => {
-        document.body.innerHTML = "<p>Authentication complete. You can close this window.</p>";
+        document.body.innerHTML =
+          "<p>Authentication complete. You can close this window.</p>";
       }, 500);
     </script>
   </body>
