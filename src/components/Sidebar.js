@@ -38,9 +38,9 @@ export default function Sidebar({ onNavigate }) {
               }
             >
               <span className="sidebar-icon" aria-hidden>
-                🚗
+                👨‍✈️
               </span>
-              <span className="sidebar-text">Rides</span>
+              <span className="sidebar-text">Drivers</span>
             </button>
           </li>
         </ul>
