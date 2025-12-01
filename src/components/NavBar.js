@@ -1,16 +1,19 @@
 // src/components/NavBar.js
-import React from "react";
 import { useKeycloak } from "@react-keycloak/web";
 
 export default function NavBar() {
   const { keycloak } = useKeycloak();
-  const logoUrl =
-    "https://www.voltacabs.com/assets/img/logo/volta-ai-logo%20W.png";
 
   return (
     <header className="top-nav">
       <div className="nav-left">
-        <img src={logoUrl} alt="Volta Logo" className="nav-logo" />
+        <a href="https://www.voltacabs.com" target="_blank" rel="noreferrer">
+          <img
+            src="https://www.voltacabs.com/assets/img/logo/volta-ai-logo%20W.png"
+            alt="Volta Logo"
+            className="nav-logo"
+          />
+        </a>
         <div style={{ marginLeft: 12 }}></div>
       </div>
 

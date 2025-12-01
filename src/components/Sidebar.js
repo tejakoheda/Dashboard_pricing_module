@@ -1,25 +1,24 @@
-export default function Sidebar({ onNavigate }) {
-  const go = (name) => {
-    if (typeof onNavigate === "function") onNavigate(name);
-    else {
-      // fallback: update hash so you can read it (or later wire react-router)
-      window.location.hash = name === "home" ? "#/" : `#/${name}`;
-    }
+// src/components/Sidebar.js
+import { useNavigate, useLocation } from "react-router-dom";
+
+export default function Sidebar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const go = (path) => {
+    navigate(path);
   };
 
   return (
     <nav className="sidebar d-none d-md-block" aria-label="Main sidebar">
       <div className="sidebar-inner">
         <ul className="sidebar-list list-unstyled">
+          {/* Dashboard Link */}
           <li className="sidebar-item">
             <button
               className="sidebar-link btn-plain"
-              onClick={() => go("home")}
-              aria-current={
-                window.location.hash === "#/" || window.location.hash === ""
-                  ? "true"
-                  : "false"
-              }
+              onClick={() => go("/")}
+              aria-current={location.pathname === "/" ? "true" : "false"}
             >
               <span className="sidebar-icon" aria-hidden>
                 🏠
@@ -27,15 +26,13 @@ export default function Sidebar({ onNavigate }) {
               <span className="sidebar-text">Dashboard</span>
             </button>
           </li>
+
+          {/* Drivers Link */}
           <li className="sidebar-item">
             <button
               className="sidebar-link btn-plain"
-              onClick={() => go("home")}
-              aria-current={
-                window.location.hash === "#/" || window.location.hash === ""
-                  ? "true"
-                  : "false"
-              }
+              onClick={() => go("/drivers")}
+              aria-current={location.pathname === "/drivers" ? "true" : "false"}
             >
               <span className="sidebar-icon" aria-hidden>
                 👨‍✈️
