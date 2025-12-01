@@ -156,7 +156,7 @@ body{
   -webkit-appearance: none;
   appearance: none;
   border: none;
-  background: transparent;
+  background: linear-gradient(to right, #A43931, #1D4350);
   width: 100%;
   text-align: left;
   padding: 10px;
