@@ -1,56 +1,36 @@
 // src/components/Sidebar.js
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 export default function Sidebar() {
-  const navigate = useNavigate();
   const location = useLocation();
-
-  // State to manage the open/close status of the Drivers dropdown
   const [isDriversOpen, setDriversOpen] = useState(false);
 
-  // Automatically open the dropdown if we are on a drivers sub-page
+  // Auto-open dropdown if user is already in drivers routes
   useEffect(() => {
     if (location.pathname.startsWith("/drivers")) {
       setDriversOpen(true);
     }
   }, [location.pathname]);
 
-  const go = (path) => {
-    navigate(path);
-  };
-
-  const toggleDrivers = () => {
-    setDriversOpen(!isDriversOpen);
-  };
-
   return (
     <nav className="sidebar d-none d-md-block" aria-label="Main sidebar">
       <div className="sidebar-inner">
         <ul className="sidebar-list list-unstyled">
-          {/* Dashboard Link */}
+          {/* Dashboard */}
           <li className="sidebar-item">
-            <button
-              className="sidebar-link btn-plain"
-              onClick={() => go("/")}
-              aria-current={location.pathname === "/" ? "true" : "false"}
-            >
-              <span className="sidebar-icon" aria-hidden>
-                🏠
-              </span>
+            <NavLink to="/" className="sidebar-link btn-plain">
+              <span className="sidebar-icon">🏠</span>
               <span className="sidebar-text">Dashboard</span>
-            </button>
+            </NavLink>
           </li>
 
-          {/* Drivers Dropdown Trigger */}
+          {/* Drivers Dropdown */}
           <li className="sidebar-item">
             <button
               className="sidebar-link btn-plain"
-              onClick={toggleDrivers}
+              onClick={() => setDriversOpen(!isDriversOpen)}
               aria-expanded={isDriversOpen}
-              aria-current={
-                location.pathname.startsWith("/drivers") ? "true" : "false"
-              }
             >
               <div
                 style={{
@@ -60,9 +40,7 @@ export default function Sidebar() {
                   flex: 1,
                 }}
               >
-                <span className="sidebar-icon" aria-hidden>
-                  👨‍✈️
-                </span>
+                <span className="sidebar-icon">👨‍✈️</span>
                 <span className="sidebar-text">Drivers Management</span>
               </div>
               <span className={`dropdown-arrow ${isDriversOpen ? "open" : ""}`}>
@@ -70,64 +48,61 @@ export default function Sidebar() {
               </span>
             </button>
 
-            {/* Dropdown Menu */}
             {isDriversOpen && (
-              <ul className="sidebar-submenu list-unstyled">
+              <ul className="sidebar-submenu list-styled">
                 <li>
-                  <button
-                    className={`submenu-link ${
-                      location.pathname === "/drivers" ? "active" : ""
-                    }`}
-                    onClick={() => go("/drivers")}
+                  <NavLink
+                    to="/drivers"
+                    className={({ isActive }) =>
+                      `submenu-link ${isActive ? "active" : ""}`
+                    }
                   >
                     Drivers List
-                  </button>
+                  </NavLink>
                 </li>
+
                 <li>
-                  <button
-                    className={`submenu-link ${
-                      location.pathname === "/drivers/onboarding"
-                        ? "active"
-                        : ""
-                    }`}
-                    onClick={() => go("/drivers/onboarding")}
+                  <NavLink
+                    to="/drivers/onboarding"
+                    className={({ isActive }) =>
+                      `submenu-link ${isActive ? "active" : ""}`
+                    }
                   >
                     Driver Onboarding
-                  </button>
+                  </NavLink>
                 </li>
+
                 <li>
-                  <button
-                    className={`submenu-link ${
-                      location.pathname === "/drivers/manual-verification"
-                        ? "active"
-                        : ""
-                    }`}
-                    onClick={() => go("/drivers/manual-verification")}
+                  <NavLink
+                    to="/drivers/manual-verification"
+                    className={({ isActive }) =>
+                      `submenu-link ${isActive ? "active" : ""}`
+                    }
                   >
                     Manual Verification
-                  </button>
+                  </NavLink>
                 </li>
+
                 <li>
-                  <button
-                    className={`submenu-link ${
-                      location.pathname === "/drivers/auto-verification"
-                        ? "active"
-                        : ""
-                    }`}
-                    onClick={() => go("/drivers/auto-verification")}
+                  <NavLink
+                    to="/drivers/auto-verification"
+                    className={({ isActive }) =>
+                      `submenu-link ${isActive ? "active" : ""}`
+                    }
                   >
                     Auto Verifications
-                  </button>
+                  </NavLink>
                 </li>
+
                 <li>
-                  <button
-                    className={`submenu-link ${
-                      location.pathname === "/drivers/feedback" ? "active" : ""
-                    }`}
-                    onClick={() => go("/drivers/feedback")}
+                  <NavLink
+                    to="/drivers/feedback"
+                    className={({ isActive }) =>
+                      `submenu-link ${isActive ? "active" : ""}`
+                    }
                   >
                     Driver Feedback
-                  </button>
+                  </NavLink>
                 </li>
               </ul>
             )}
