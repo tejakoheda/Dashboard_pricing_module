@@ -24,8 +24,6 @@ const AutoVerification = lazy(() =>
 );
 const DriverFeedback = lazy(() => import("./pages/DriverPages/DriverFeedback"));
 
-// Simple loading spinner component
-
 export default function App() {
   const { keycloak, initialized } = useKeycloak();
 

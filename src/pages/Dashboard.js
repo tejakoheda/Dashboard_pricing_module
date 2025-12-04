@@ -93,8 +93,9 @@ export default function Dashboard() {
           accent="#00ea04ff"
         />
       </div>
-
-      <VehicleTypes />
+      <div>
+        <VehicleTypes />
+      </div>
 
       <div className="panel-row">
         <div className="left-panel">

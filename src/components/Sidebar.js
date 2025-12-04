@@ -49,7 +49,7 @@ export default function Sidebar() {
             </button>
 
             {isDriversOpen && (
-              <ul className="sidebar-submenu list-styled">
+              <ul className="sidebar-submenu list-unstyled">
                 <li>
                   <NavLink
                     to="/drivers"

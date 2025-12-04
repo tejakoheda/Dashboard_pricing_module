@@ -98,7 +98,7 @@ export default function DriverOnboarding() {
               <input
                 type="tel"
                 className={`form-control ${errors.phone ? "is-invalid" : ""}`}
-                placeholder="+91 98765 43210"
+                placeholder="+91 9XXXX XXXX0"
                 {...register("phone", {
                   required: "Phone number is required",
                   pattern: {
@@ -117,7 +117,7 @@ export default function DriverOnboarding() {
               <input
                 type="email"
                 className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                placeholder="abcd@mail.com"
+                placeholder="abcd@gmail.com"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -159,7 +159,7 @@ export default function DriverOnboarding() {
               <label className="form-label">H.No / Flat No</label>
               <input
                 className={`form-control ${errors.houseNo ? "is-invalid" : ""}`}
-                placeholder="#123, Block A"
+                placeholder="House No / Flat No"
                 {...register("houseNo", { required: "House No is required" })}
               />
               {errors.houseNo && (
@@ -227,7 +227,7 @@ export default function DriverOnboarding() {
               <label className="form-label">State</label>
               <input
                 className={`form-control ${errors.state ? "is-invalid" : ""}`}
-                placeholder="State"
+                placeholder="E.g. Telangana"
                 {...register("state", { required: "State is required" })}
               />
               {errors.state && (
@@ -457,7 +457,7 @@ export default function DriverOnboarding() {
                 className={`form-control ${
                   errors.bankName ? "is-invalid" : ""
                 }`}
-                placeholder="Bank Name"
+                placeholder="E.g. State Bank of India"
                 {...register("bankName", { required: "Bank Name is required" })}
               />
               {errors.bankName && (
@@ -511,7 +511,7 @@ export default function DriverOnboarding() {
               <label className="form-label">UPI ID</label>
               <input
                 className={`form-control ${errors.upiId ? "is-invalid" : ""}`}
-                placeholder="username@upi"
+                placeholder="yourname@bank"
                 {...register("upiId", { required: "UPI ID is required" })}
               />
               {errors.upiId && (
