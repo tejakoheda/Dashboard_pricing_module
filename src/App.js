@@ -21,14 +21,6 @@ const AutoVerification = lazy(() =>
 );
 const DriverFeedback = lazy(() => import("./pages/DriverPages/DriverFeedback"));
 
-const RequireRole = ({ role }) => {
-  const { keycloak } = useKeycloak();
-  if (!keycloak.hasRealmRole(role)) {
-    return <Navigate to="/" replace />;
-  }
-  return <Outlet />;
-};
-
 export default function App() {
   const { keycloak, initialized } = useKeycloak();
 
@@ -67,22 +59,17 @@ export default function App() {
             }
           >
             <Route path="/" element={<Dashboard />} />
-            <Route element={<RequireRole role="driver_manager" />}>
-              <Route path="/drivers" element={<DriversPage />} />
-              <Route
-                path="/drivers/onboarding"
-                element={<DriverOnboarding />}
-              />
-              <Route
-                path="/drivers/manual-verification"
-                element={<ManualVerification />}
-              />
-              <Route
-                path="/drivers/auto-verification"
-                element={<AutoVerification />}
-              />
-              <Route path="/drivers/feedback" element={<DriverFeedback />} />
-            </Route>
+            <Route path="/drivers" element={<DriversPage />} />
+            <Route path="/drivers/onboarding" element={<DriverOnboarding />} />
+            <Route
+              path="/drivers/manual-verification"
+              element={<ManualVerification />}
+            />
+            <Route
+              path="/drivers/auto-verification"
+              element={<AutoVerification />}
+            />
+            <Route path="/drivers/feedback" element={<DriverFeedback />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
