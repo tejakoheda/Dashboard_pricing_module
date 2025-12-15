@@ -27,6 +27,7 @@ export const glassTableStyles = {
       borderBottom: "1px solid rgba(255,255,255,0.05)",
       "&:hover": {
         backgroundColor: "rgba(255, 255, 255, 0.03) !important",
+        color: "#ffffff !important",
         cursor: "default",
       },
     },
