@@ -2,7 +2,7 @@
 import { useEffect, Suspense, lazy } from "react";
 import { useKeycloak } from "@react-keycloak/web";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import { DriverProvider } from "./context/DriverContext"; // Import Provider
+import { DriverProvider } from "./context/DriverContext"; // Restored Import
 
 import LoginPage from "./pages/LoginPage/LoginPage";
 import Layout from "./components/Layout";
@@ -21,6 +21,14 @@ const AutoVerification = lazy(() =>
 );
 const DriverFeedback = lazy(() => import("./pages/DriverPages/DriverFeedback"));
 
+const ConsumerList = lazy(() => import("./pages/ConsumerPages/ConsumerList"));
+const ConsumerOnboarding = lazy(() =>
+  import("./pages/ConsumerPages/ConsumerOnboarding")
+);
+
+const PricingModule = lazy(() => import("./pages/PricingPages/PricingModule"));
+const PricingManage = lazy(() => import("./pages/PricingPages/PricingManage"));
+
 export default function App() {
   const { keycloak, initialized } = useKeycloak();
 
@@ -37,6 +45,8 @@ export default function App() {
 
   return (
     <DriverProvider>
+      {" "}
+      {/* Restored Provider */}
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route
@@ -59,6 +69,15 @@ export default function App() {
             }
           >
             <Route path="/" element={<Dashboard />} />
+
+            {/* Pricing Routes */}
+            <Route
+              path="/pricing"
+              element={<Navigate to="/pricing/new" replace />}
+            />
+            <Route path="/pricing/new" element={<PricingModule />} />
+            <Route path="/pricing/manage" element={<PricingManage />} />
+
             <Route path="/drivers" element={<DriversPage />} />
             <Route path="/drivers/onboarding" element={<DriverOnboarding />} />
             <Route
@@ -70,6 +89,12 @@ export default function App() {
               element={<AutoVerification />}
             />
             <Route path="/drivers/feedback" element={<DriverFeedback />} />
+
+            <Route path="/consumers" element={<ConsumerList />} />
+            <Route
+              path="/consumers/onboarding"
+              element={<ConsumerOnboarding />}
+            />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -1,14 +1,16 @@
-// src/pages/DriverPages/DriverList.js
+// src/pages/ConsumerPages/ConsumerList.js
 import { useState, useMemo } from "react";
 import DataTable from "react-data-table-component";
-import { useDriverContext } from "../../context/DriverContext"; // Restored hook
-import { glassTableStyles } from "./ManualVerification"; // Reuse styles
-import "./drivers.css";
+import { useDriverContext } from "../../context/DriverContext";
+// Assuming glassTableStyles is exported from ManualVerification.js
+import { glassTableStyles } from "../DriverPages/ManualVerification";
+import "../DriverPages/drivers.css"; // Imports necessary CSS for hover-popup and styling
 
-// --- Modal Component for Driver Ride History ---
-const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
+// Modal Component for Consumer History (Unchanged)
+const ConsumerHistoryModal = ({ rideHistory, consumer, onClose }) => {
   const hasHistory = rideHistory && rideHistory.length > 0;
 
+  // Define columns for the history table
   const historyColumns = [
     {
       name: "Time",
@@ -20,7 +22,7 @@ const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
       ),
     },
     { name: "Booking ID", selector: (row) => row.bookingId, grow: 1 },
-    { name: "Customer", selector: (row) => row.customer, grow: 1.5 },
+    { name: "Last Driver", selector: (row) => row.lastDriver, grow: 1.5 },
     {
       name: "Route",
       selector: (row) => `${row.pickup} to ${row.droppedLocation}`,
@@ -42,7 +44,7 @@ const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
       ),
       grow: 1.5,
     },
-    { name: "Fare", selector: (row) => row.fare, grow: 1 },
+    { name: "Payment Details", selector: (row) => row.payment, grow: 2 },
   ];
 
   return (
@@ -53,7 +55,8 @@ const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
       >
         <div className="modal-header-custom">
           <h3 className="section-title">
-            Ride History for {driver.firstName} {driver.lastName} (D{driver.id})
+            Ride History for {consumer.firstName} {consumer.lastName} (
+            {consumer.id})
           </h3>
           <button className="close-btn" onClick={onClose}>
             &times;
@@ -67,11 +70,6 @@ const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
             customStyles={glassTableStyles}
             highlightOnHover
             defaultSortFieldId={1}
-            noDataComponent={
-              <div style={{ padding: "20px", color: "#fff" }}>
-                No ride history found for this driver.
-              </div>
-            }
           />
         ) : (
           <div
@@ -86,9 +84,12 @@ const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
             }}
           >
             <p style={{ marginBottom: "15px", color: "#fff", fontWeight: 600 }}>
-              ⚠️ No ride history found for this driver.
+              ⚠️ No ride history found for this consumer.
             </p>
-            <p>This driver has not completed any verifiable rides yet.</p>
+            <p>
+              This consumer was recently onboarded or has not completed any
+              rides yet.
+            </p>
           </div>
         )}
 
@@ -108,23 +109,23 @@ const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
     </div>
   );
 };
-// --- End Modal Component ---
 
-export default function DriversPage() {
-  const { drivers } = useDriverContext(); // Restored hook
+export default function ConsumerList() {
+  const { consumers } = useDriverContext(); // Get consumers from context
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDriver, setSelectedDriver] = useState(null);
+  const [selectedConsumer, setSelectedConsumer] = useState(null);
 
-  const verifiedDrivers = useMemo(() => {
-    return drivers.filter(
-      (d) =>
-        d.status === "verified" &&
-        (d.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          d.phone.includes(searchTerm) ||
-          (d.regNumber &&
-            d.regNumber.toLowerCase().includes(searchTerm.toLowerCase())))
+  const filteredConsumers = useMemo(() => {
+    return consumers.filter(
+      // Filter on context consumers
+      (c) =>
+        c.status === "Active" &&
+        (c.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          c.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          c.mobile.includes(searchTerm) ||
+          c.id.toLowerCase().includes(searchTerm.toLowerCase()))
     );
-  }, [drivers, searchTerm]);
+  }, [searchTerm, consumers]); // Depend on consumers state
 
   const columns = [
     {
@@ -132,45 +133,44 @@ export default function DriversPage() {
       selector: (row) => `${row.firstName} ${row.lastName}`,
       sortable: true,
       grow: 1.5,
-      allowOverflow: true,
+      allowOverflow: true, // Crucial for hover popup
       cell: (row) => (
+        // Implemented hover popup logic here
         <div className="name-cell-container">
           <span
-            className="driver-name-text"
-            style={{ textDecoration: "none", color: "#fff" }}
+            className="driver-name-text" // Reusing driver-name-text style
+            style={{ textDecoration: "none", color: "#38bff8" }}
           >
             {row.firstName} {row.lastName}
           </span>
           <div className="hover-popup">
-            <div className="popup-header">Driver Details</div>
+            <div className="popup-header">Consumer Details</div>
             <p>
-              <strong>Reg No:</strong> {row.regNumber}
+              <strong>ID:</strong> {row.id}
             </p>
             <p>
-              <strong>Mobile:</strong> {row.phone}
+              <strong>Mobile:</strong> {row.mobile}
             </p>
             <p>
-              <strong>Address:</strong> {row.city}
+              <strong>Email:</strong> {row.email}
+            </p>
+            <p>
+              <strong>Gender:</strong> {row.gender}
+            </p>
+            <p>
+              <strong>DOB:</strong> {row.dob}
             </p>
           </div>
         </div>
       ),
     },
-    { name: "Mobile", selector: (row) => row.phone },
-    {
-      name: "Vehicle",
-      selector: (row) => row.vehicleType,
-      cell: (row) => (
-        <span>
-          {row.vehicleType}{" "}
-          <small style={{ color: "#94a3b8" }}>({row.regNumber})</small>
-        </span>
-      ),
-    },
-    { name: "City", selector: (row) => row.city, sortable: true },
+    { name: "Consumer ID", selector: (row) => row.id, sortable: true, grow: 1 },
+    { name: "Mobile", selector: (row) => row.mobile, grow: 1.5 },
+    { name: "Email", selector: (row) => row.email, grow: 2 },
     {
       name: "Status",
       selector: (row) => row.status,
+      grow: 1,
       cell: (row) => (
         <span
           style={{
@@ -193,13 +193,14 @@ export default function DriversPage() {
       cell: (row) => (
         <button
           className="btn-view-docs"
-          onClick={() => setSelectedDriver(row)}
+          onClick={() => setSelectedConsumer(row)}
           style={{ padding: "6px 10px" }}
         >
           View History
         </button>
       ),
       ignoreRowClick: true,
+      allowOverflow: true,
       button: true,
       width: "120px",
     },
@@ -215,11 +216,11 @@ export default function DriversPage() {
           marginBottom: "10px",
         }}
       >
-        <h2 className="page-title">Verified Drivers List</h2>
+        <h2 className="page-title">Active Consumer List</h2>
         <div className="search-container" style={{ margin: 0 }}>
           <input
             type="text"
-            placeholder="Search verified drivers..."
+            placeholder="Search consumers by name, ID, or mobile..."
             className="search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -230,24 +231,23 @@ export default function DriversPage() {
       <div className="glass-table-card">
         <DataTable
           columns={columns}
-          data={verifiedDrivers}
+          data={filteredConsumers}
           pagination
           customStyles={glassTableStyles}
           highlightOnHover
           noDataComponent={
             <div style={{ padding: "20px", color: "#fff" }}>
-              No verified drivers found.
+              No active consumers found.
             </div>
           }
         />
       </div>
 
-      {/* Driver History Modal */}
-      {selectedDriver && (
-        <DriverHistoryModal
-          driver={selectedDriver}
-          rideHistory={selectedDriver.rideHistory}
-          onClose={() => setSelectedDriver(null)}
+      {selectedConsumer && (
+        <ConsumerHistoryModal
+          consumer={selectedConsumer}
+          rideHistory={selectedConsumer.rideHistory}
+          onClose={() => setSelectedConsumer(null)}
         />
       )}
     </div>
