@@ -6,35 +6,20 @@ export default function LoginPage() {
   const { keycloak } = useKeycloak();
 
   const openPopupLogin = async () => {
-    try {
-      const redirectUri =
-        window.location.origin + "/keycloak-popup-callback.html";
-      // createLoginUrl may return a promise in some versions
-      const loginUrl = await keycloak.createLoginUrl({ redirectUri });
+    const url = await keycloak.createLoginUrl({
+      redirectUri: `${window.location.origin}/keycloak-popup-callback.html`,
+    });
 
-      const width = 420;
-      const height = 640;
-      const left = window.screenX + (window.innerWidth - width) / 2;
-      const top = window.screenY + (window.innerHeight - height) / 2;
+    const w = 420,
+      h = 640;
+    const left = window.screenX + (window.innerWidth - w) / 2;
+    const top = window.screenY + (window.innerHeight - h) / 2;
 
-      window.open(
-        loginUrl,
-        "kc_login_popup",
-        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
-      );
-    } catch (err) {
-      console.error("Failed to open Keycloak popup login:", err);
-      // fallback: try synchronous createLoginUrl (older keycloak-js)
-      try {
-        const fallback = keycloak.createLoginUrl({
-          redirectUri: window.location.origin + "/keycloak-popup-callback.html",
-        });
-        window.open(fallback, "kc_login_popup");
-      } catch (e) {
-        console.error("Fallback failed:", e);
-        alert("Unable to open login popup. Check console for details.");
-      }
-    }
+    window.open(
+      url,
+      "kc_login_popup",
+      `width=${w},height=${h},left=${left},top=${top}`
+    );
   };
 
   return (

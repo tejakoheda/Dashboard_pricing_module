@@ -71,13 +71,9 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
 
             {/* Pricing Routes */}
-            <Route
-              path="/pricing"
-              element={<Navigate to="/pricing/new" replace />}
-            />
+
             <Route path="/pricing/new" element={<PricingModule />} />
             <Route path="/pricing/manage" element={<PricingManage />} />
-
             <Route path="/drivers" element={<DriversPage />} />
             <Route path="/drivers/onboarding" element={<DriverOnboarding />} />
             <Route
