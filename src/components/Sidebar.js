@@ -6,9 +6,8 @@ export default function Sidebar() {
   const location = useLocation();
   const [isDriversOpen, setDriversOpen] = useState(false);
   const [isConsumersOpen, setConsumersOpen] = useState(false);
-  const [isPricingOpen, setPricingOpen] = useState(false); // New state for Pricing
+  const [isPricingOpen, setPricingOpen] = useState(false);
 
-  // Auto-open dropdown if user is already in drivers, consumers, or pricing routes
   useEffect(() => {
     if (location.pathname.startsWith("/drivers")) {
       setDriversOpen(true);
@@ -19,7 +18,6 @@ export default function Sidebar() {
     }
 
     if (location.pathname.startsWith("/pricing")) {
-      // Auto-open Pricing dropdown
       setPricingOpen(true);
     }
   }, [location.pathname]);
@@ -41,7 +39,6 @@ export default function Sidebar() {
             <button
               className="sidebar-link btn-plain"
               onClick={() => setDriversOpen(!isDriversOpen)}
-              aria-expanded={isDriversOpen}
             >
               <div
                 style={{
@@ -124,7 +121,7 @@ export default function Sidebar() {
             <button
               className="sidebar-link btn-plain"
               onClick={() => setConsumersOpen(!isConsumersOpen)}
-              aria-expanded={isConsumersOpen}
+              // aria-expanded={isConsumersOpen}
             >
               <div
                 style={{

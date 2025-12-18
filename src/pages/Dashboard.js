@@ -15,6 +15,7 @@ export default function Dashboard() {
 
   // Memoize calculations so they don't run on every render
   const stats = useMemo(() => {
+    // used use memo for performance optimization and single time calculation
     const totalRev = revenueLast10Days.reduce((s, r) => s + r.revenue, 0);
     const totalRides = revenueLast10Days.reduce((s, r) => s + r.rides, 0);
     const count = revenueLast10Days.length;
