@@ -2,7 +2,7 @@
 import { useEffect, Suspense, lazy } from "react";
 import { useKeycloak } from "@react-keycloak/web";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import { DriverProvider } from "./context/DriverContext"; // Restored Import
+import { DriverProvider } from "./context/DriverContext";
 
 import LoginPage from "./pages/LoginPage/LoginPage";
 import Layout from "./components/Layout";
@@ -29,6 +29,9 @@ const ConsumerOnboarding = lazy(() =>
 const PricingModule = lazy(() => import("./pages/PricingPages/PricingModule"));
 const PricingManage = lazy(() => import("./pages/PricingPages/PricingManage"));
 
+// --- New Import ---
+const Promotions = lazy(() => import("./pages/PromotionPages/Promotions"));
+
 export default function App() {
   const { keycloak, initialized } = useKeycloak();
 
@@ -45,8 +48,6 @@ export default function App() {
 
   return (
     <DriverProvider>
-      {" "}
-      {/* Restored Provider */}
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route
@@ -59,6 +60,7 @@ export default function App() {
               )
             }
           />
+
           <Route
             element={
               keycloak.authenticated ? (
@@ -70,10 +72,7 @@ export default function App() {
           >
             <Route path="/" element={<Dashboard />} />
 
-            {/* Pricing Routes */}
-
-            <Route path="/pricing/new" element={<PricingModule />} />
-            <Route path="/pricing/manage" element={<PricingManage />} />
+            {/* Driver Routes */}
             <Route path="/drivers" element={<DriversPage />} />
             <Route path="/drivers/onboarding" element={<DriverOnboarding />} />
             <Route
@@ -86,11 +85,19 @@ export default function App() {
             />
             <Route path="/drivers/feedback" element={<DriverFeedback />} />
 
+            {/* Consumer Routes */}
             <Route path="/consumers" element={<ConsumerList />} />
             <Route
               path="/consumers/onboarding"
               element={<ConsumerOnboarding />}
             />
+
+            {/* Pricing Routes */}
+            <Route path="/pricing/new" element={<PricingModule />} />
+            <Route path="/pricing/manage" element={<PricingManage />} />
+
+            {/* --- New Promotion Route --- */}
+            <Route path="/promotions" element={<Promotions />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

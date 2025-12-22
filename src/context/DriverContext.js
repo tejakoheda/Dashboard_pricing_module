@@ -83,12 +83,48 @@ const initialPricingModels = [
   },
 ];
 
+const initialPromotions = [
+  {
+    id: 1,
+    code: "WELCOME50",
+    title: "50% Off First Ride",
+    description: "Get 50% off up to ₹100 on your first booking.",
+    type: "percentage", // percentage | flat
+    value: 50,
+    maxDiscount: 100,
+    minOrderValue: 0,
+    startDate: "2024-01-01",
+    endDate: "2024-12-31",
+    usageLimit: 1000,
+    usageCount: 45,
+    vehicleType: "All",
+    status: "Active",
+  },
+  {
+    id: 2,
+    code: "AUTO20",
+    title: "Flat ₹20 Off on Auto",
+    description: "Flat discount on all Auto rides above ₹100.",
+    type: "flat",
+    value: 20,
+    maxDiscount: 20,
+    minOrderValue: 100,
+    startDate: "2024-02-01",
+    endDate: "2024-06-30",
+    usageLimit: 500,
+    usageCount: 120,
+    vehicleType: "Auto",
+    status: "Active",
+  },
+];
+
 /* -------------------- PROVIDER -------------------- */
 
 export const DriverProvider = ({ children }) => {
   const [drivers, setDrivers] = useState(initialDrivers);
   const [consumers, setConsumers] = useState(initialConsumers);
   const [pricingModels, setPricingModels] = useState(initialPricingModels);
+  const [promotions, setPromotions] = useState(initialPromotions);
 
   /* ---------- DRIVER ACTIONS ---------- */
 
@@ -164,17 +200,56 @@ export const DriverProvider = ({ children }) => {
     );
   };
 
+  /* ---------- PROMOTION ACTIONS (New) ---------- */
+
+  const addPromotion = (data) => {
+    setPromotions((prev) => [
+      {
+        ...data,
+        id: Date.now(),
+        usageCount: 0,
+        status: "Active",
+      },
+      ...prev,
+    ]);
+  };
+
+  const updatePromotion = (id, data) => {
+    setPromotions((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...data } : p))
+    );
+  };
+
+  const deletePromotion = (id) => {
+    setPromotions((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const togglePromotionStatus = (id) => {
+    setPromotions((prev) =>
+      prev.map((p) =>
+        p.id === id
+          ? { ...p, status: p.status === "Active" ? "Inactive" : "Active" }
+          : p
+      )
+    );
+  };
+
   return (
     <DriverContext.Provider
       value={{
         drivers,
         consumers,
         pricingModels,
+        promotions, // Exported
         addDriver,
         addConsumer,
         addPricingModel,
         updatePricingModel,
         togglePricingStatus,
+        addPromotion, // Exported
+        updatePromotion, // Exported
+        deletePromotion, // Exported
+        togglePromotionStatus, // Exported
         verifyDriver: (id) => updateDriverStatus(id, "verified"),
         rejectDriver: (id) => updateDriverStatus(id, "rejected"),
       }}

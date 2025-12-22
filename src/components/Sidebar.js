@@ -7,19 +7,13 @@ export default function Sidebar() {
   const [isDriversOpen, setDriversOpen] = useState(false);
   const [isConsumersOpen, setConsumersOpen] = useState(false);
   const [isPricingOpen, setPricingOpen] = useState(false);
+  // No submenu for marketing yet, but prepared state if needed
+  // const [isMarketingOpen, setMarketingOpen] = useState(false);
 
   useEffect(() => {
-    if (location.pathname.startsWith("/drivers")) {
-      setDriversOpen(true);
-    }
-
-    if (location.pathname.startsWith("/consumers")) {
-      setConsumersOpen(true);
-    }
-
-    if (location.pathname.startsWith("/pricing")) {
-      setPricingOpen(true);
-    }
+    if (location.pathname.startsWith("/drivers")) setDriversOpen(true);
+    if (location.pathname.startsWith("/consumers")) setConsumersOpen(true);
+    if (location.pathname.startsWith("/pricing")) setPricingOpen(true);
   }, [location.pathname]);
 
   return (
@@ -68,7 +62,6 @@ export default function Sidebar() {
                     Drivers List
                   </NavLink>
                 </li>
-                {/* ... other driver links ... */}
                 <li>
                   <NavLink
                     to="/drivers/onboarding"
@@ -79,7 +72,6 @@ export default function Sidebar() {
                     Driver Onboarding
                   </NavLink>
                 </li>
-
                 <li>
                   <NavLink
                     to="/drivers/manual-verification"
@@ -90,7 +82,6 @@ export default function Sidebar() {
                     Manual Verification
                   </NavLink>
                 </li>
-
                 <li>
                   <NavLink
                     to="/drivers/auto-verification"
@@ -101,7 +92,6 @@ export default function Sidebar() {
                     Auto Verifications
                   </NavLink>
                 </li>
-
                 <li>
                   <NavLink
                     to="/drivers/feedback"
@@ -121,7 +111,6 @@ export default function Sidebar() {
             <button
               className="sidebar-link btn-plain"
               onClick={() => setConsumersOpen(!isConsumersOpen)}
-              // aria-expanded={isConsumersOpen}
             >
               <div
                 style={{
@@ -153,7 +142,6 @@ export default function Sidebar() {
                     Consumer List
                   </NavLink>
                 </li>
-
                 <li>
                   <NavLink
                     to="/consumers/onboarding"
@@ -168,12 +156,11 @@ export default function Sidebar() {
             )}
           </li>
 
-          {/* Pricing Module Dropdown (New Structure) */}
+          {/* Pricing Module Dropdown */}
           <li className="sidebar-item">
             <button
               className="sidebar-link btn-plain"
               onClick={() => setPricingOpen(!isPricingOpen)}
-              aria-expanded={isPricingOpen}
             >
               <div
                 style={{
@@ -195,7 +182,7 @@ export default function Sidebar() {
               <ul className="sidebar-submenu list-unstyled">
                 <li>
                   <NavLink
-                    to="/pricing/new" // Link to the complex form
+                    to="/pricing/new"
                     className={({ isActive }) =>
                       `submenu-link ${isActive ? "active" : ""}`
                     }
@@ -203,10 +190,9 @@ export default function Sidebar() {
                     Create New Structure
                   </NavLink>
                 </li>
-
                 <li>
                   <NavLink
-                    to="/pricing/manage" // Link to the new list view/management page
+                    to="/pricing/manage"
                     className={({ isActive }) =>
                       `submenu-link ${isActive ? "active" : ""}`
                     }
@@ -216,6 +202,15 @@ export default function Sidebar() {
                 </li>
               </ul>
             )}
+          </li>
+
+          {/* --- NEW MARKETING SECTION --- */}
+
+          <li className="sidebar-item">
+            <NavLink to="/promotions" className="sidebar-link btn-plain">
+              <span className="sidebar-icon">🏷️</span>
+              <span className="sidebar-text">Coupons</span>
+            </NavLink>
           </li>
         </ul>
       </div>

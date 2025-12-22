@@ -171,7 +171,7 @@ body{
 }
 
 /* icon */
-.sidebar-icon { width: 28px; display:inline-block; text-align:center; }
+.sidebar-icon { width: 28px; display:inline-block; text-align:center; text-decoration: none; }
 
 /* hover / active */
 .btn-plain:hover {
