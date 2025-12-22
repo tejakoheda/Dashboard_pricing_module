@@ -2,22 +2,30 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const [isDriversOpen, setDriversOpen] = useState(false);
   const [isConsumersOpen, setConsumersOpen] = useState(false);
   const [isPricingOpen, setPricingOpen] = useState(false);
-  // No submenu for marketing yet, but prepared state if needed
-  // const [isMarketingOpen, setMarketingOpen] = useState(false);
 
   useEffect(() => {
+    // Open dropdowns based on current path
     if (location.pathname.startsWith("/drivers")) setDriversOpen(true);
     if (location.pathname.startsWith("/consumers")) setConsumersOpen(true);
     if (location.pathname.startsWith("/pricing")) setPricingOpen(true);
+
+    // Auto-close sidebar on mobile when route changes
+    if (window.innerWidth < 768 && onClose) {
+      onClose();
+    }
   }, [location.pathname]);
 
   return (
-    <nav className="sidebar d-none d-md-block" aria-label="Main sidebar">
+    // Removed 'd-none d-md-block' and added conditional 'open' class
+    <nav
+      className={`sidebar ${isOpen ? "open" : ""}`}
+      aria-label="Main sidebar"
+    >
       <div className="sidebar-inner">
         <ul className="sidebar-list list-unstyled">
           {/* Dashboard */}

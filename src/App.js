@@ -1,7 +1,7 @@
 // src/App.js
 import { useEffect, Suspense, lazy } from "react";
 import { useKeycloak } from "@react-keycloak/web";
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { DriverProvider } from "./context/DriverContext";
 
 import LoginPage from "./pages/LoginPage/LoginPage";

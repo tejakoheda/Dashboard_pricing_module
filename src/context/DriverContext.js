@@ -58,6 +58,7 @@ const initialDrivers = [
   },
 ];
 
+// UPDATED: Added history for Alice Johnson
 const initialConsumers = [
   {
     id: "C001",
@@ -66,7 +67,38 @@ const initialConsumers = [
     mobile: "9876543210",
     email: "alice@example.com",
     status: "Active",
-    rideHistory: [],
+    rideHistory: [
+      {
+        time: "2023-12-20 18:45",
+        bookingId: "BKG-77821",
+        lastDriver: "Ravi Kumar",
+        pickup: "Cyber Towers",
+        droppedLocation: "Kondapur",
+        timeTaken: "15 mins",
+        distance: "4.2 km",
+        payment: "₹120 (UPI)",
+      },
+      {
+        time: "2023-12-18 09:30",
+        bookingId: "BKG-66502",
+        lastDriver: "Sita Lakshmi",
+        pickup: "Miyapur Metro",
+        droppedLocation: "JNTU College",
+        timeTaken: "10 mins",
+        distance: "3 km",
+        payment: "₹80 (Cash)",
+      },
+      {
+        time: "2023-12-10 21:15",
+        bookingId: "BKG-55490",
+        lastDriver: "Rajesh V",
+        pickup: "Forum Mall",
+        droppedLocation: "KPHB Colony",
+        timeTaken: "22 mins",
+        distance: "6.5 km",
+        payment: "₹190 (Wallet)",
+      },
+    ],
   },
 ];
 

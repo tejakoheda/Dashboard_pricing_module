@@ -408,9 +408,41 @@ export default function ManualVerification() {
           customStyles={glassTableStyles}
           highlightOnHover
           responsive
+          // UPDATED: Styled empty state to match table design
           noDataComponent={
-            <div style={{ padding: "20px", color: "#fff" }}>
-              No pending verifications found.
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "48px",
+                color: "#000000ff", // Matches the table header color
+                width: "100%",
+                background: "transparent",
+              }}
+            >
+              <div>📋</div>
+              <h4
+                style={{
+                  margin: "0 0 8px",
+                  color: "#000000ff",
+                  fontWeight: 600,
+                }}
+              >
+                No Pending Verifications
+              </h4>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "0.9rem",
+                  maxWidth: "300px",
+                  textAlign: "center",
+                }}
+              >
+                There are currently no driver applications waiting for manual
+                review.
+              </p>
             </div>
           }
         />

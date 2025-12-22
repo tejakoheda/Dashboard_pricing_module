@@ -1,3 +1,5 @@
+/* src/styles.css */
+
 /* ======================
    Base & gradient (same as login)
    ====================== */
@@ -15,10 +17,7 @@ body{
  margin: 0;
   font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
   color: #f7f9fa;
-
-  /* SAME background as login */
   background: linear-gradient(to right, #A43931, #1D4350);
-
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -40,6 +39,18 @@ body{
 .nav-logo{ height:48px; width:auto; object-fit:contain; display:block; border-radius:4px; }
 .nav-title{ font-weight:800; font-size:16px; color:#fff; }
 .nav-sub{ font-size:12px; color:rgba(255,255,255,0.85); }
+
+/* --- NEW: Menu Button (Mobile) --- */
+.btn-menu {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: none; /* Hidden on desktop */
+  padding: 4px;
+  margin-right: 8px;
+  transition: transform 0.2s;
+}
+.btn-menu:active { transform: scale(0.9); }
 
 /* Logout button */
 .btn-logout{
@@ -114,7 +125,7 @@ body{
 }
 
 /* -----------------------
-   SIMPLE FIXED SIDEBAR
+   FIXED SIDEBAR & RESPONSIVENESS
    ----------------------- */
 .sidebar {
   position: fixed;
@@ -131,12 +142,62 @@ body{
   flex-direction: column;
   justify-content: space-between;
   border-top-right-radius: 12px;
-  overflow-y: auto; /* enable scrolling if menu gets long */
+  overflow-y: auto; 
+  transition: transform 0.3s ease-in-out;
 }
 
-/* hide on mobile (Bootstrap helper included in component) */
-@media (max-width: 767px) {
-  .sidebar { display: none; }
+/* Sidebar Scrollbar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.1);
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.4);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+  /* Show Menu Button */
+  .btn-menu {
+    display: block;
+  }
+
+  /* Hide sidebar off-screen by default on mobile */
+  .sidebar {
+    transform: translateX(-100%);
+    width: 260px; /* Slightly wider for touch targets */
+    background: #1e293b; /* Solid background for legibility */
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+  }
+
+  /* Slide in when open */
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Overlay */
+  .sidebar-overlay {
+    position: fixed;
+    top: 68px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 68px);
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+    animation: fadeIn 0.3s;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* inner */
@@ -161,7 +222,6 @@ body{
   padding: 10px;
   display: flex;
   align-items: center;
-  /* justify-content: space-between; <-- REMOVED this to fix Dashboard button alignment */
   gap: 12px;
   border-radius: 8px;
   color: rgba(255,255,255,0.95);
@@ -237,12 +297,6 @@ body{
   border-left: 3px solid #FFCE54; /* Active accent bar */
 }
 
-/* content shift when sidebar present (desktop) */
-.with-sidebar { margin-left:240px ; } /* 240 to leave some gap */
-@media (max-width: 767px) {
-  .with-sidebar { margin-left: 0; } /* mobile: full width */
-}
-
 /* Full page container */
 .dashboard-layout {
   display: flex;
@@ -257,12 +311,15 @@ body{
   margin-left: 220px;    /* THIS pushes your content right */
   padding: 20px;
   margin-top: 68px;      /* height of navbar */
+  transition: margin-left 0.3s ease;
 }
 
 /* Mobile view: remove shift */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .dashboard-content {
     margin-left: 0;
+    width: 100%;
+    padding: 16px;
   }
 }
 
