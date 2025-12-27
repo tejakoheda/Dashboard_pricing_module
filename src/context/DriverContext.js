@@ -58,7 +58,6 @@ const initialDrivers = [
   },
 ];
 
-// UPDATED: Added history for Alice Johnson
 const initialConsumers = [
   {
     id: "C001",
@@ -272,16 +271,16 @@ export const DriverProvider = ({ children }) => {
         drivers,
         consumers,
         pricingModels,
-        promotions, // Exported
+        promotions,
         addDriver,
         addConsumer,
         addPricingModel,
         updatePricingModel,
         togglePricingStatus,
-        addPromotion, // Exported
-        updatePromotion, // Exported
-        deletePromotion, // Exported
-        togglePromotionStatus, // Exported
+        addPromotion,
+        updatePromotion,
+        deletePromotion,
+        togglePromotionStatus,
         verifyDriver: (id) => updateDriverStatus(id, "verified"),
         rejectDriver: (id) => updateDriverStatus(id, "rejected"),
       }}

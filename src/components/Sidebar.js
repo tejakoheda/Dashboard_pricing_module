@@ -21,7 +21,6 @@ export default function Sidebar({ isOpen, onClose }) {
   }, [location.pathname]);
 
   return (
-    // Removed 'd-none d-md-block' and added conditional 'open' class
     <nav
       className={`sidebar ${isOpen ? "open" : ""}`}
       aria-label="Main sidebar"
@@ -212,7 +211,7 @@ export default function Sidebar({ isOpen, onClose }) {
             )}
           </li>
 
-          {/* --- NEW MARKETING SECTION --- */}
+          {/* ---MARKETING SECTION --- */}
 
           <li className="sidebar-item">
             <NavLink to="/promotions" className="sidebar-link btn-plain">

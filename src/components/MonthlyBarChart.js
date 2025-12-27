@@ -1,12 +1,12 @@
 // src/components/MonthlyBarChart.js
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
+  ResponsiveContainer, // Recharts components
+  BarChart, // for creating a responsive bar chart
+  Bar, // bar element
+  XAxis, // horizontal axis
+  YAxis, // vertical axis
+  Tooltip, // tooltip on hover
+  CartesianGrid, // grid lines
 } from "recharts";
 
 export default function MonthlyBarChart({ data }) {

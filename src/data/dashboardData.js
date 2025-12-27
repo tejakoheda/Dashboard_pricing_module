@@ -28,11 +28,12 @@ export const revenueLast4Months = [
 
 // Last 10 days revenue (for the 10-day bar chart)
 export const revenueLast10Days = (() => {
-  const arr = [];
-  const today = new Date();
+  const arr = []; //storege array
+  const today = new Date(); // current date
   for (let i = 9; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
+    // loop for last 10 days
+    const d = new Date(today); // create new date object
+    d.setDate(today.getDate() - i); // set date to i days ago
     const label = d.toISOString().slice(5, 10); // "MM-DD"
     arr.push({
       date: label,
@@ -41,4 +42,4 @@ export const revenueLast10Days = (() => {
     });
   }
   return arr;
-})();
+})(); // IIFE to generate last 10 days data

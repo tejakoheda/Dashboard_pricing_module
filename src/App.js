@@ -7,6 +7,7 @@ import { DriverProvider } from "./context/DriverContext";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import Layout from "./components/Layout";
 import Loading from "./pages/LoadingPage";
+// Lazy load page components
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const DriversPage = lazy(() => import("./pages/DriverPages/DriverList"));
@@ -29,8 +30,9 @@ const ConsumerOnboarding = lazy(() =>
 const PricingModule = lazy(() => import("./pages/PricingPages/PricingModule"));
 const PricingManage = lazy(() => import("./pages/PricingPages/PricingManage"));
 
-// --- New Import ---
 const Promotions = lazy(() => import("./pages/PromotionPages/Promotions"));
+
+// Main App Component
 
 export default function App() {
   const { keycloak, initialized } = useKeycloak();

@@ -7,7 +7,8 @@ import "./drivers.css";
 
 // --- Modal Component for Driver Ride History ---
 const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
-  const hasHistory = rideHistory && rideHistory.length > 0;
+  //popup to show ride history
+  const hasHistory = rideHistory && rideHistory.length > 0; // Check if ride history exists
 
   const historyColumns = [
     {

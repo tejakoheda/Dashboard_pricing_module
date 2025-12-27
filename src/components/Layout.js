@@ -12,13 +12,10 @@ export default function Layout() {
 
   return (
     <div className="dashboard-layout">
-      {/* Pass toggle function to NavBar */}
       <NavBar onToggleSidebar={toggleSidebar} />
 
-      {/* Pass open state and close function to Sidebar */}
       <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
 
-      {/* Mobile Overlay - only visible when sidebar is open on mobile */}
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={closeSidebar}></div>
       )}
