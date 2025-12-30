@@ -54,118 +54,11 @@ export const glassTableStyles = {
   },
 };
 
-// --- Modal Component for Driver Ride History (Defined Locally) ---
-const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
-  const hasHistory = rideHistory && rideHistory.length > 0;
-
-  const historyColumns = [
-    {
-      name: "Time",
-      selector: (row) => row.time,
-      sortable: true,
-      grow: 1.5,
-      cell: (row) => (
-        <span style={{ color: "#38bff8", fontWeight: 600 }}>{row.time}</span>
-      ),
-    },
-    { name: "Booking ID", selector: (row) => row.bookingId, grow: 1 },
-    { name: "Customer", selector: (row) => row.customer, grow: 1.5 },
-    {
-      name: "Route",
-      selector: (row) => `${row.pickup} to ${row.droppedLocation}`,
-      cell: (row) => (
-        <span>
-          {row.pickup} <span style={{ color: "#94a3b8" }}>→</span>{" "}
-          {row.droppedLocation}
-        </span>
-      ),
-      grow: 2,
-    },
-    {
-      name: "Duration/Distance",
-      selector: (row) => `${row.timeTaken} / ${row.distance}`,
-      cell: (row) => (
-        <span style={{ fontSize: "0.85rem", color: "#cbd5e1" }}>
-          {row.timeTaken} / {row.distance}
-        </span>
-      ),
-      grow: 1.5,
-    },
-    { name: "Fare", selector: (row) => row.fare, grow: 1 },
-  ];
-
-  return (
-    <div className="doc-modal-overlay">
-      <div
-        className="doc-modal-content"
-        style={{ maxWidth: "95%", width: "1200px", padding: "30px" }}
-      >
-        <div className="modal-header-custom">
-          <h3 className="section-title">
-            Ride History for {driver.firstName} {driver.lastName} (D{driver.id})
-          </h3>
-          <button className="close-btn" onClick={onClose}>
-            &times;
-          </button>
-        </div>
-
-        {hasHistory ? (
-          <DataTable
-            columns={historyColumns}
-            data={rideHistory}
-            customStyles={glassTableStyles}
-            highlightOnHover
-            defaultSortFieldId={1}
-            noDataComponent={
-              <div style={{ padding: "20px", color: "#fff" }}>
-                No ride history found for this driver.
-              </div>
-            }
-          />
-        ) : (
-          <div
-            style={{
-              padding: "40px",
-              color: "#94a3b8",
-              textAlign: "center",
-              fontSize: "1.1rem",
-              background: "#0f172a",
-              borderRadius: "12px",
-              border: "1px solid rgba(255,255,255,0.1)",
-            }}
-          >
-            <p style={{ marginBottom: "15px", color: "#fff", fontWeight: 600 }}>
-              ⚠️ No ride history found for this driver.
-            </p>
-            <p>This driver has not completed any verifiable rides yet.</p>
-          </div>
-        )}
-
-        <div
-          className="modal-actions"
-          style={{ justifyContent: "flex-end", paddingTop: "15px" }}
-        >
-          <button
-            onClick={onClose}
-            className="btn-reject"
-            style={{ border: "none", background: "#334155", color: "#fff" }}
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-// --- End Modal Component ---
-
 export default function ManualVerification() {
   const { drivers, verifyDriver, rejectDriver } = useDriverContext(); // Restored hook
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDocs, setSelectedDocs] = useState(null);
   const [expandedImage, setExpandedImage] = useState(null);
-  const [selectedDriverForHistory, setSelectedDriverForHistory] =
-    useState(null); // New State
 
   const filteredDrivers = drivers.filter(
     (d) =>
@@ -326,7 +219,6 @@ export default function ManualVerification() {
       name: "Applied On",
       selector: (row) => row.submittedAt,
       sortable: true,
-      right: true,
     },
     {
       name: "Documents",
@@ -338,22 +230,7 @@ export default function ManualVerification() {
       ignoreRowClick: true,
       button: true,
     },
-    // New History Column
-    {
-      name: "History",
-      cell: (row) => (
-        <button
-          className="btn-view-docs"
-          onClick={() => setSelectedDriverForHistory(row)}
-          style={{ padding: "6px 10px" }}
-        >
-          View History
-        </button>
-      ),
-      ignoreRowClick: true,
-      button: true,
-      width: "120px",
-    },
+
     {
       name: "Actions",
       cell: (row) => (
@@ -455,15 +332,6 @@ export default function ManualVerification() {
         />
       )}
       <ImageViewer />
-
-      {/* Driver History Modal for Manual Verification Page */}
-      {selectedDriverForHistory && (
-        <DriverHistoryModal
-          driver={selectedDriverForHistory}
-          rideHistory={selectedDriverForHistory.rideHistory}
-          onClose={() => setSelectedDriverForHistory(null)}
-        />
-      )}
     </div>
   );
 }

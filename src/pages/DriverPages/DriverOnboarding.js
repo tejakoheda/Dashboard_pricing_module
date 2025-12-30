@@ -10,15 +10,15 @@ export default function DriverOnboarding() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm(); // React Hook Form
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // For navigation
   const { addDriver } = useDriverContext(); // Use Context
-  const hasReferral = watch("hasReferral");
+  const hasReferral = watch("hasReferral"); // Watch referral checkbox
 
   const onSubmit = (data) => {
     // Process files: Convert FileList to Object URL for preview in this demo
-    const processedData = { ...data };
+    const processedData = { ...data }; // Shallow copy of data
     const fileFields = [
       "selfie",
       "vehicleImage",
@@ -30,7 +30,7 @@ export default function DriverOnboarding() {
       "panBack",
       "rcFront",
       "rcBack",
-    ];
+    ]; // Fields that are files
 
     fileFields.forEach((field) => {
       if (data[field] && data[field].length > 0) {
@@ -38,14 +38,14 @@ export default function DriverOnboarding() {
       } else {
         processedData[field] = null;
       }
-    });
+    }); // Process file inputs
 
     // Save to global context
-    addDriver(processedData);
+    addDriver(processedData); // Save driver data
 
-    alert("Application Submitted! Redirecting to verification...");
-    navigate("/drivers/manual-verification");
-  };
+    alert("Application Submitted! Redirecting to verification..."); // Confirmation alert
+    navigate("/drivers/manual-verification"); // Redirect to verification
+  }; // On form submit handler
 
   return (
     <div className="dashboard-container">

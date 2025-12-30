@@ -520,7 +520,12 @@ export function PricingForm({ initialData = null, onSubmitSuccess, onClose }) {
             type="button"
             onClick={onClose}
             className="btn-reject"
-            style={{ marginRight: "12px" }}
+            style={{
+              marginRight: "12px",
+              color: "white",
+              borderColor: "white",
+              backgroundColor: "transparent",
+            }}
           >
             Cancel
           </button>
