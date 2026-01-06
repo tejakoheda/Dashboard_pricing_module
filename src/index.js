@@ -7,12 +7,12 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./keycloak";
 import App from "./App";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles.css";
+import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS
+import "./styles.css"; // Custom global styles
 
 const initOptions = {
-  onLoad: "check-sso",
-  pkceMethod: "S256",
+  onLoad: "check-sso", // or "login-required"
+  pkceMethod: "S256", // Use PKCE for enhanced security
 };
 
 createRoot(document.getElementById("root")).render(

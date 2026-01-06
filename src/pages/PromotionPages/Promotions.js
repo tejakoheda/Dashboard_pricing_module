@@ -3,6 +3,9 @@ import React, { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import DataTable from "react-data-table-component";
 import { useDriverContext } from "../../context/DriverContext";
+// 1. Import useKeycloak
+import { useKeycloak } from "@react-keycloak/web";
+
 // Import the shared styles from ManualVerification to ensure exact match
 import { glassTableStyles } from "../DriverPages/ManualVerification";
 import "../DriverPages/drivers.css";
@@ -10,6 +13,7 @@ import "../DriverPages/DriverOnboarding.css";
 
 // --- 1. Promotion Form Component ---
 const PromotionForm = ({ initialData, onSubmit, onCancel }) => {
+  // ... (No changes to PromotionForm) ...
   const {
     register,
     handleSubmit,
@@ -35,15 +39,15 @@ const PromotionForm = ({ initialData, onSubmit, onCancel }) => {
 
   return (
     <div
-      className="glass-table-card" // Using the exact same class as the table container
+      className="glass-table-card"
       style={{
         padding: "25px",
         marginBottom: "25px",
         animation: "fadeIn 0.3s ease-out",
-        border: "1px solid rgba(255, 255, 255, 0.08)", // Standard border
+        border: "1px solid rgba(255, 255, 255, 0.08)",
       }}
     >
-      {/* Header */}
+      {/* ... (Rest of the form UI remains the same) ... */}
       <div
         style={{
           display: "flex",
@@ -77,6 +81,7 @@ const PromotionForm = ({ initialData, onSubmit, onCancel }) => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        {/* ... (Form Inputs remain the same) ... */}
         {/* Row 1 */}
         <div
           className="form-grid"
@@ -244,6 +249,9 @@ const PromotionForm = ({ initialData, onSubmit, onCancel }) => {
 
 // --- 2. Main Promotions Page ---
 export default function Promotions() {
+  // 2. Access keycloak instance
+  const { keycloak } = useKeycloak();
+
   const {
     promotions,
     addPromotion,
@@ -417,16 +425,20 @@ export default function Promotions() {
           >
             Edit
           </button>
-          <button
-            className="btn-reject-sm"
-            onClick={() => {
-              if (window.confirm("Delete this coupon?"))
-                deletePromotion(row.id);
-            }}
-            style={{ padding: "6px 12px", fontSize: "0.8rem" }}
-          >
-            &times;
-          </button>
+
+          {/* 3. Condition: Only show delete button if user has 'admin' realm role */}
+          {keycloak.hasRealmRole("admin") && (
+            <button
+              className="btn-reject-sm"
+              onClick={() => {
+                if (window.confirm("Delete this coupon?"))
+                  deletePromotion(row.id);
+              }}
+              style={{ padding: "6px 12px", fontSize: "0.8rem" }}
+            >
+              &times;
+            </button>
+          )}
         </div>
       ),
       width: "160px",
@@ -435,7 +447,7 @@ export default function Promotions() {
 
   return (
     <div className="dashboard-container">
-      {/* Page Title & Add Button */}
+      {/* ... (Rest of the render return remains the same) ... */}
       <div
         style={{
           display: "flex",
@@ -464,7 +476,6 @@ export default function Promotions() {
         )}
       </div>
 
-      {/* --- FORM SECTION --- */}
       {showForm && (
         <PromotionForm
           initialData={editData}
@@ -473,10 +484,7 @@ export default function Promotions() {
         />
       )}
 
-      {/* --- TABLE SECTION --- */}
-      {/* Using 'glass-table-card' class to match other pages */}
       <div className="glass-table-card">
-        {/* Search Bar inside card like ManualVerification */}
         <div style={{ padding: "15px 15px 5px 15px" }}>
           <input
             type="text"
@@ -492,7 +500,7 @@ export default function Promotions() {
           columns={columns}
           data={filteredPromotions}
           pagination
-          customStyles={glassTableStyles} // <--- SHARED STYLES RESTORED
+          customStyles={glassTableStyles}
           highlightOnHover
           responsive
           noDataComponent={

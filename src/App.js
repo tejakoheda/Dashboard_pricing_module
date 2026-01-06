@@ -56,7 +56,7 @@ export default function App() {
             path="/login"
             element={
               keycloak.authenticated ? (
-                <Navigate to="/" replace />
+                <Navigate to="/" replace /> // replace to avoid going back to login
               ) : (
                 <LoginPage />
               )
@@ -101,7 +101,6 @@ export default function App() {
             {/* --- New Promotion Route --- */}
             <Route path="/promotions" element={<Promotions />} />
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
     </DriverProvider>

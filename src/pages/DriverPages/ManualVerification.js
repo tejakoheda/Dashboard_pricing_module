@@ -55,7 +55,7 @@ export const glassTableStyles = {
 };
 
 export default function ManualVerification() {
-  const { drivers, verifyDriver, rejectDriver } = useDriverContext(); // Restored hook
+  const { drivers, verifyDriver, rejectDriver } = useDriverContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDocs, setSelectedDocs] = useState(null);
   const [expandedImage, setExpandedImage] = useState(null);
@@ -285,7 +285,6 @@ export default function ManualVerification() {
           customStyles={glassTableStyles}
           highlightOnHover
           responsive
-          // UPDATED: Styled empty state to match table design
           noDataComponent={
             <div
               style={{
@@ -294,7 +293,7 @@ export default function ManualVerification() {
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "48px",
-                color: "#000000ff", // Matches the table header color
+                color: "#000000ff",
                 width: "100%",
                 background: "transparent",
               }}

@@ -1,14 +1,14 @@
 // src/pages/DriverPages/DriverList.js
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { useDriverContext } from "../../context/DriverContext"; // Restored hook
-import { glassTableStyles } from "./ManualVerification"; // Reuse styles
+import axios from "axios";
+// import { useDriverContext } from "../../context/DriverContext";
+import { glassTableStyles } from "./ManualVerification";
 import "./drivers.css";
 
 // --- Modal Component for Driver Ride History ---
 const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
-  //popup to show ride history
-  const hasHistory = rideHistory && rideHistory.length > 0; // Check if ride history exists
+  const hasHistory = rideHistory && rideHistory.length > 0;
 
   const historyColumns = [
     {
@@ -112,15 +112,37 @@ const DriverHistoryModal = ({ rideHistory, driver, onClose }) => {
 // --- End Modal Component ---
 
 export default function DriversPage() {
-  const { drivers } = useDriverContext(); // Restored hook
+  // const { drivers } = useDriverContext(); // Removed Context
+  const [drivers, setDrivers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDriver, setSelectedDriver] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("https://fakerestapi.azurewebsites.net/api/v1/Authors")
+      .then((apiResponse) => {
+        const response = apiResponse.data.map((item) => ({
+          driverid: item.id,
+          driverName: `${item.firstName}`, // Data from API
+
+          phone: "84639948546", //  phone number
+          vehicleType: item.id % 2 === 0 ? "SUV" : "Sedan", // Mock vehicle type
+          regNumber: "AP 28 C 6829", //  reg number
+          city: "Hyderabad",
+          status: "verified",
+          rideHistory: [],
+        }));
+
+        setDrivers(response);
+      })
+      .catch((error) => console.error("Error fetching drivers:", error));
+  }, []);
 
   const verifiedDrivers = useMemo(() => {
     return drivers.filter(
       (d) =>
         d.status === "verified" &&
-        (d.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (d.driverName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           d.phone.includes(searchTerm) ||
           (d.regNumber &&
             d.regNumber.toLowerCase().includes(searchTerm.toLowerCase())))
@@ -130,7 +152,7 @@ export default function DriversPage() {
   const columns = [
     {
       name: "Name",
-      selector: (row) => `${row.firstName} ${row.lastName}`,
+      selector: (row) => `${row.driverName}`,
       sortable: true,
       grow: 1.5,
       allowOverflow: true,
@@ -140,7 +162,7 @@ export default function DriversPage() {
             className="driver-name-text"
             style={{ textDecoration: "none", color: "#fff" }}
           >
-            {row.firstName} {row.lastName}
+            {row.driverName}
           </span>
           <div className="hover-popup">
             <div className="popup-header">Driver Details</div>
@@ -237,7 +259,9 @@ export default function DriversPage() {
           highlightOnHover
           noDataComponent={
             <div style={{ padding: "20px", color: "#fff" }}>
-              No verified drivers found.
+              {drivers.length === 0
+                ? "Loading drivers..."
+                : "No verified drivers found."}
             </div>
           }
         />

@@ -1,5 +1,5 @@
 // src/pages/Dashboard.js
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import MetricsCard from "../components/MetricsCard";
 import MonthlyBarChart from "../components/MonthlyBarChart";
 import DaysBarChart from "../components/DaysBarChart";
@@ -110,7 +110,10 @@ export default function Dashboard() {
 
           <div className="summary-item">
             <div className="muted">Today's Rides</div>
-            <div className="bold">{m.totalRidesToday.toLocaleString()}</div>
+            <div className="bold">
+              {m.totalRidesToday.toLocaleString()}
+            </div>{" "}
+            {/* Added toLocaleString for better readability adds , if its a number */}
           </div>
 
           <div className="summary-item">

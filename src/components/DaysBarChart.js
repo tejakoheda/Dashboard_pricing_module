@@ -19,11 +19,7 @@ export default function DaysBarChart({ data }) {
             data={data}
             margin={{ top: 8, right: 10, left: -6, bottom: 4 }}
           >
-            <CartesianGrid
-              vertical={false}
-              strokeDasharray="3 3"
-              stroke="rgba(6, 231, 119, 0)"
-            />
+            <CartesianGrid stroke="rgba(6, 231, 119, 0.1)" />
             <XAxis
               dataKey="date"
               tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}

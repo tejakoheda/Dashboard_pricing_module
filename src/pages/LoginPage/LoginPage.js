@@ -6,6 +6,7 @@ export default function LoginPage() {
   const { keycloak } = useKeycloak();
 
   const openPopupLogin = async () => {
+    //async used to wait for createLoginUrl
     const url = await keycloak.createLoginUrl({
       redirectUri: `${window.location.origin}/keycloak-popup-callback.html`,
     });
