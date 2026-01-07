@@ -1,21 +1,58 @@
 // src/pages/Dashboard.js
 import { useMemo, useState, useEffect } from "react";
+import axios from "axios";
 import MetricsCard from "../components/MetricsCard";
+import Loading from "../components/ApiLoading";
 import MonthlyBarChart from "../components/MonthlyBarChart";
 import DaysBarChart from "../components/DaysBarChart";
 import VehicleTypes from "../components/VehicleTypes";
-import {
-  todayMetrics,
-  revenueLast4Months,
-  revenueLast10Days,
-} from "../data/dashboardData";
 
 export default function Dashboard() {
-  const m = todayMetrics;
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Memoize calculations so they don't run on every render
+  useEffect(() => {
+    // Fetching from the provided GitHub Raw API link
+    axios
+      .get(
+        "https://raw.githubusercontent.com/tejakoheda/voltaApi/main/data.json"
+      )
+      .then((response) => {
+        // The API returns the whole DB, so we access .dashboardStats specifically
+        if (response.data && response.data.dashboardStats) {
+          setDashboardData(response.data.dashboardStats);
+        } else {
+          setError("Invalid data structure received");
+        }
+        setLoading(false); // Stop loading once data is fetched
+      })
+      .catch((err) => {
+        console.error("Error fetching dashboard data:", err);
+        setError("Failed to load dashboard data.");
+        setLoading(false);
+      });
+  }, []);
+
   const stats = useMemo(() => {
-    // used use memo for performance optimization and single time calculation
+    if (!dashboardData) return null;
+
+    const { revenueLast10Days, revenueLast4Months } = dashboardData;
+
+    // if (
+    //   !revenueLast10Days ||
+    //   !revenueLast4Months ||
+    //   revenueLast10Days.length === 0
+    // ) {
+    //   return {
+    //     avgRevenue: 0,
+    //     avgRides: 0,
+    //     bestDayDate: "-",
+    //     lowestDayDate: "-",
+    //     trend: "-",
+    //   };
+    // }
+
     const totalRev = revenueLast10Days.reduce((s, r) => s + r.revenue, 0);
     const totalRides = revenueLast10Days.reduce((s, r) => s + r.rides, 0);
     const count = revenueLast10Days.length;
@@ -28,17 +65,30 @@ export default function Dashboard() {
     );
 
     const isRevenueIncreasing =
+      revenueLast4Months.length > 1 &&
       revenueLast4Months[revenueLast4Months.length - 1].revenue >
-      revenueLast4Months[0].revenue;
+        revenueLast4Months[0].revenue;
 
     return {
-      avgRevenue: Math.round(totalRev / count),
-      avgRides: Math.round(totalRides / count),
+      avgRevenue: totalRev / count,
+      avgRides: totalRides / count,
       bestDayDate: bestDay.date,
       lowestDayDate: lowestDay.date,
       trend: isRevenueIncreasing ? "Increasing ↑" : "Decreasing ↓",
     };
-  }, []);
+  }, [dashboardData]);
+
+  if (loading)
+    return (
+      <div className="dashboard-container d-flex align-items-center justify-content-center">
+        <Loading />
+      </div>
+    );
+  if (error) return <div className="error-screen">{error}</div>;
+  if (!dashboardData) return null;
+
+  const m = dashboardData.todayMetrics;
+  const { revenueLast4Months, revenueLast10Days, vehicleTypes } = dashboardData;
 
   return (
     <div className="dashboard-container">
@@ -94,8 +144,10 @@ export default function Dashboard() {
           accent="#00ea04ff"
         />
       </div>
+
       <div>
-        <VehicleTypes />
+        {/* Pass fetched vehicle data to the component */}
+        <VehicleTypes data={vehicleTypes} />
       </div>
 
       <div className="panel-row">
@@ -104,23 +156,18 @@ export default function Dashboard() {
           <DaysBarChart data={revenueLast10Days} />
         </div>
 
-        {/* QUICK SUMMARY  */}
+        {/* QUICK SUMMARY */}
         <aside className="right-panel card summary-card">
           <h6 className="summary-title">Quick Summary</h6>
 
           <div className="summary-item">
             <div className="muted">Today's Rides</div>
-            <div className="bold">
-              {m.totalRidesToday.toLocaleString()}
-            </div>{" "}
-            {/* Added toLocaleString for better readability adds , if its a number */}
+            <div className="bold">{m.totalRidesToday.toLocaleString()}</div>
           </div>
 
           <div className="summary-item">
             <div className="muted">Today's Revenue</div>
-            <div className="bold">
-              ₹{Math.round(m.revenueToday).toLocaleString()}
-            </div>
+            <div className="bold">₹{m.revenueToday.toLocaleString()}</div>
           </div>
 
           <div className="summary-item">
@@ -144,7 +191,7 @@ export default function Dashboard() {
           </div>
 
           <div className="summary-item">
-            <div className="muted">vehicles</div>
+            <div className="muted">Vehicles</div>
             <div className="bold">{m.vehiclesOnRoad.toLocaleString()}</div>
           </div>
 

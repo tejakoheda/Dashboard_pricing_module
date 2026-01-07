@@ -119,23 +119,29 @@ export default function DriversPage() {
 
   useEffect(() => {
     axios
-      .get("https://fakerestapi.azurewebsites.net/api/v1/Authors")
-      .then((apiResponse) => {
-        const response = apiResponse.data.map((item) => ({
-          driverid: item.id,
-          driverName: `${item.firstName}`, // Data from API
+      .get(
+        "https://raw.githubusercontent.com/tejakoheda/voltaApi/main/data.json"
+      )
+      .then((res) => {
+        console.log("Full API response:", res.data);
+        console.log("Drivers array:", res.data.drivers);
 
-          phone: "84639948546", //  phone number
-          vehicleType: item.id % 2 === 0 ? "SUV" : "Sedan", // Mock vehicle type
-          regNumber: "AP 28 C 6829", //  reg number
-          city: "Hyderabad",
-          status: "verified",
-          rideHistory: [],
+        const response = res.data.drivers.map((item) => ({
+          id: item.driverid,
+          driverName: item.driverName,
+          phone: item.phone,
+          vehicleType: item.vehicleType,
+          regNumber: item.regNumber,
+          city: item.city,
+          status: item.status,
+          rideHistory: item.rideHistory || [],
         }));
 
         setDrivers(response);
       })
-      .catch((error) => console.error("Error fetching drivers:", error));
+      .catch((error) => {
+        console.error("Error fetching drivers:", error);
+      });
   }, []);
 
   const verifiedDrivers = useMemo(() => {
