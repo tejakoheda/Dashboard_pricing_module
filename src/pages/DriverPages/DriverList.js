@@ -120,7 +120,7 @@ export default function DriversPage() {
   useEffect(() => {
     axios
       .get(
-        "https://raw.githubusercontent.com/tejakoheda/voltaApi/main/data.json"
+        "https://raw.githubusercontent.com/tejakoheda/voltaApi/main/data.json",
       )
       .then((res) => {
         console.log("Full API response:", res.data);
@@ -145,13 +145,14 @@ export default function DriversPage() {
   }, []);
 
   const verifiedDrivers = useMemo(() => {
+    //useMemo used for performance optimization
     return drivers.filter(
       (d) =>
         d.status === "verified" &&
         (d.driverName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           d.phone.includes(searchTerm) ||
           (d.regNumber &&
-            d.regNumber.toLowerCase().includes(searchTerm.toLowerCase())))
+            d.regNumber.toLowerCase().includes(searchTerm.toLowerCase()))),
     );
   }, [drivers, searchTerm]);
 

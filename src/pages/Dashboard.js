@@ -1,4 +1,5 @@
 // src/pages/Dashboard.js
+import { useKeycloak } from "@react-keycloak/web";
 import { useMemo, useState, useEffect } from "react";
 import axios from "axios";
 import MetricsCard from "../components/MetricsCard";
@@ -12,20 +13,31 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  console.log("user LoggedIn dashboard");
+
+  const { keycloak, initialized } = useKeycloak();
+  console.log("keycloak obj dashboard", keycloak);
+
   useEffect(() => {
-    // Fetching from the provided GitHub Raw API link
+    if (initialized && keycloak.authenticated) {
+      console.log("Parsed Token:", keycloak.tokenParsed);
+      console.log("Refresh Token:", keycloak.refreshToken);
+      console.log("ID Token:", keycloak.idToken);
+    }
+  }, [initialized, keycloak]);
+
+  useEffect(() => {
     axios
       .get(
-        "https://raw.githubusercontent.com/tejakoheda/voltaApi/main/data.json"
+        "https://raw.githubusercontent.com/tejakoheda/voltaApi/main/data.json",
       )
       .then((response) => {
-        // The API returns the whole DB, so we access .dashboardStats specifically
         if (response.data && response.data.dashboardStats) {
           setDashboardData(response.data.dashboardStats);
         } else {
           setError("Invalid data structure received");
         }
-        setLoading(false); // Stop loading once data is fetched
+        setLoading(false); // Stops loading once data is fetched
       })
       .catch((err) => {
         console.error("Error fetching dashboard data:", err);
@@ -58,10 +70,10 @@ export default function Dashboard() {
     const count = revenueLast10Days.length;
 
     const bestDay = revenueLast10Days.reduce((a, b) =>
-      a.revenue > b.revenue ? a : b
+      a.revenue > b.revenue ? a : b,
     );
     const lowestDay = revenueLast10Days.reduce((a, b) =>
-      a.revenue < b.revenue ? a : b
+      a.revenue < b.revenue ? a : b,
     );
 
     const isRevenueIncreasing =
